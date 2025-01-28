@@ -44,7 +44,7 @@ def main():
             tip = hand_landmarks.landmark[7]  # Tip of the ring finger
 
             x = int(base.x * frame.shape[1])
-            y = int(base.y * frame.shape[0]) + 10  # Offset down
+            y = int(base.y * frame.shape[0]) + 50  # Offset down
 
             if ring_on_finger:
                 ring_radius = calculate_ring_radius(base, tip)  # Adjust radius to fit finger size
