@@ -84,11 +84,25 @@ def calculate_transform_matrix(ring_position, x_axis, y_axis, z_axis):
     transform_matrix[:3, 3] = ring_position
     return transform_matrix
 
+def extract_rotation_translation(transform_matrix):
+    """Extract rotation vector, translation vector, and camera position from the transform matrix."""
+    translation_vector = transform_matrix[:3, 3]
+    rotation_matrix = transform_matrix[:3, :3]
+
+    # Convert the rotation matrix to a rotation vector
+    # rotation_vector, _ = cv2.Rodrigues(rotation_matrix)
+
+    # Camera position is simply the negative of the rotation matrix inverse multiplied by the translation
+    camera_position = -np.linalg.inv(rotation_matrix).dot(translation_vector)
+
+    return rotation_matrix, translation_vector, camera_position
+
+
 def main():
     # File paths
-    image_path = "C:\\Users\\Ksena\\Documents\\Ring_try_on\\data\\ring_try_on_input_data\\ring_try_on_input_data\\images\\original_1.png"
-    depth_file_path = "C:\\Users\\Ksena\\Documents\\Ring_try_on\\data\\ring_try_on_input_data\\ring_try_on_input_data\\images\\depth_logs_1.txt"
-    calibration_file_path = "C:\\Users\\Ksena\\Documents\\Ring_try_on\\data\\ring_try_on_input_data\\ring_try_on_input_data\\images\\depth_calibration_logs_1.txt"
+    image_path = "C:\\Users\\Ksena\\Documents\\Ring_try_on\\data\\ring_try_on_input_data\\ring_try_on_input_data\\images\\original_2.png"
+    depth_file_path = "C:\\Users\\Ksena\\Documents\\Ring_try_on\\data\\ring_try_on_input_data\\ring_try_on_input_data\\images\\depth_logs_2.txt"
+    calibration_file_path = "C:\\Users\\Ksena\\Documents\\Ring_try_on\\data\\ring_try_on_input_data\\ring_try_on_input_data\\images\\depth_calibration_logs_2.txt"
 
     # Load image and process it
     image, image_rgb = load_image(image_path)
@@ -110,19 +124,14 @@ def main():
     ring_position, landmark5, landmark6, landmark9 = calculate_ring_finger_position(landmarks_3d)
     x_axis, y_axis, z_axis = calculate_axes(landmark5, landmark6, landmark9)
 
-    # Calculate the transformation matrix and camera pose
+    # Calculate the transformation matrix
     transform_matrix = calculate_transform_matrix(ring_position, x_axis, y_axis, z_axis)
-    ring_position_homogeneous = np.append(ring_position, 1)
-    camera_pose = np.matmul(transform_matrix, ring_position_homogeneous)
 
-    translation_vector = transform_matrix[:3, 3]
-    rotation_matrix = transform_matrix[:3, :3]
+    # Extract rotation and translation
+    rotation_matrix, translation_vector, camera_position = extract_rotation_translation(transform_matrix)
 
-# Convert the rotation matrix to a rotation vector
-    rotation_vector, _ = cv2.Rodrigues(rotation_matrix)
-    print("Матриця ротації",rotation_matrix)
-    print("Вектор трансляції",translation_vector)
-    print(camera_pose)
+    print("Rotation matrix:", rotation_matrix)
+    print("Translation vector:", translation_vector)
 
 if __name__ == "__main__":
     main()
