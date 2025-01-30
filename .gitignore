@@ -1,3 +1,5 @@
 data/*
 !data/.placeholder
 .DS_Store
+venv_blender
+.venv

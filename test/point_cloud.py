@@ -1,6 +1,7 @@
 import numpy as np
 import open3d as o3d
 import cv2
+from config import IMAGE_PATH, DEPTH_PATH, CALIBRATION_PATH
 
 def load_calibration(file_path: str):
     with open(file_path, 'r') as f:
@@ -14,7 +15,7 @@ def load_calibration(file_path: str):
 
     return intrinsic, extrinsic
 # Example usage
-intrinsic, extrinsic = load_calibration(r'C:\Users\Ksena\Documents\Ring_try_on\data\ring_try_on_input_data\ring_try_on_input_data\images\depth_calibration_logs_6.txt')
+intrinsic, extrinsic = load_calibration(CALIBRATION_PATH)
 print("Intrinsic Matrix:\n", intrinsic)
 print("Extrinsic Matrix:\n", extrinsic)
 
@@ -67,8 +68,8 @@ def get_point_cloud(image_path: str, depth_path: str, extrinsic: np.array, intri
 
 
 # Example usage
-image_path = 'C:\\Users\\Ksena\\Documents\\Ring_try_on\\test\\original_6.png'
-depth_path = 'C:\\Users\\Ksena\\Documents\\Ring_try_on\\data\\ring_try_on_input_data\\ring_try_on_input_data\\images\\depth_logs_6.txt'
+image_path = IMAGE_PATH
+depth_path = DEPTH_PATH
 # Assuming your depth data is stored as comma-separated values in a text file
 depth_data = np.loadtxt(depth_path, delimiter=',')
 depth_image = o3d.geometry.Image(depth_data.astype(np.float32))  # Convert to float32
