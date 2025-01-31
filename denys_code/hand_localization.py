@@ -8,7 +8,7 @@ mp_drawing = mp.solutions.drawing_utils
 
 
 def process_image(image_path, output_dir):
-    """ Process a single image to detect hand keypoints and save annotated results. """
+    
 
     os.makedirs(output_dir, exist_ok=True)
 
@@ -43,7 +43,6 @@ def process_image(image_path, output_dir):
 
 
 def process_images_in_folder(input_folder, output_folder):
-    """ Process all images in the input folder and save results in output folder. """
     image_files = [f for f in os.listdir(input_folder) if f.endswith(('.png', '.jpg', '.jpeg')) and f.startswith('original')]
 
     if not image_files:
@@ -54,7 +53,6 @@ def process_images_in_folder(input_folder, output_folder):
         process_image(os.path.join(input_folder, image_file), output_folder)
 
 def process_live_camera():
-    """ Activate webcam and perform real-time hand keypoint detection. """
     cap = cv2.VideoCapture(0)
 
     with mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5) as hands:

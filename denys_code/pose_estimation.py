@@ -4,7 +4,6 @@ import open3d as o3d
 import json
 
 def load_depth_from_log(log_path, target_size):
-    """ Reads a depth log file and converts it into a NumPy array. """
     with open(log_path, 'r') as f:
         depth_lines = f.readlines()
 

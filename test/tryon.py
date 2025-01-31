@@ -15,14 +15,12 @@ def save_image(frame):
 
 def calculate_ring_radius(base, tip):
     distance = np.linalg.norm(np.array([base.x, base.y]) - np.array([tip.x, tip.y]))
-    return max(5, int(distance * 100))  # Scale radius based on the distance between base and tip
+    return max(5, int(distance * 100))  
 
 def calculate_ring_position(base, tip, frame_shape):
-    # Середня точка між основою і кінчиком пальця
     avg_x = (base.x + tip.x) / 2
     avg_y = (base.y + tip.y) / 2
 
-    # Конвертація нормалізованих координат у пікселі
     pixel_x = int(avg_x * frame_shape[1])
     pixel_y = int(avg_y * frame_shape[0])
 
@@ -48,28 +46,23 @@ def main():
 
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
-                # Вибираємо ключові точки для безіменного пальця
-                base = hand_landmarks.landmark[6]  # Основа безіменного пальця
-                tip = hand_landmarks.landmark[5]  # Кінець безіменного пальця
+                base = hand_landmarks.landmark[6]  
+                tip = hand_landmarks.landmark[5]  
 
-                # Розраховуємо позицію кільця
                 center = calculate_ring_position(base, tip, frame.shape)
 
-                # Розраховуємо радіус кільця
                 ring_radius = calculate_ring_radius(base, tip)
 
                 if ring_on_finger:
                     draw_circle(frame, center, ring_radius)
 
-        # Відображаємо кадр з кільцями
         cv2.imshow('Rings on Fingers', frame)
 
-        # Обробка клавіш
         key = cv2.waitKey(1) & 0xFF
         if key == ord('r'):
-            ring_on_finger = not ring_on_finger  # Вмикаємо/вимикаємо кільце
+            ring_on_finger = not ring_on_finger  
         elif key == ord('s'):
-            save_image(frame)  # Зберігаємо зображення
+            save_image(frame)  
             print("Image saved on the desktop.")
         elif key == ord('q'):
             break

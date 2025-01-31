@@ -5,7 +5,7 @@ from pose_estimation import get_transformation_matrix, load_depth_from_log
 
 
 def project_3d_to_2d(point_3d, camera_intrinsics):
-    """Projects a 3D point onto a 2D image using intrinsic parameters."""
+    
     fx, fy, cx, cy = camera_intrinsics[0, 0], camera_intrinsics[1, 1], camera_intrinsics[0, 2], camera_intrinsics[1, 2]
     x, y, z = point_3d
     x_2d = int((x * fx / z) + cx)

@@ -27,30 +27,26 @@ def process_frame(frame):
         for hand_landmarks in results.multi_hand_landmarks:
             draw_points_on_image(frame, hand_landmarks.landmark)
 
-        # Process the landmarks
         hand_landmarks = results.multi_hand_landmarks[0]
         height, width, _ = frame.shape
         landmarks_list = []
 
         for lm in hand_landmarks.landmark:
             x_px, y_px = int(lm.x * width), int(lm.y * height)
-            z_value = lm.z  # Z-coordinate from Mediapipe
+            z_value = lm.z  
             landmarks_list.append([x_px, y_px, z_value])
 
-        # Calculate ring coordinates (using thumb base and tip as an example)
         ring_coordinates = [
-            (landmarks_list[4][0] + landmarks_list[5][0]) / 2,  # Midpoint between thumb base and tip
-            (landmarks_list[4][1] + landmarks_list[5][1]) / 2,  # Midpoint Y
+            (landmarks_list[4][0] + landmarks_list[5][0]) / 2,  
+            (landmarks_list[4][1] + landmarks_list[5][1]) / 2, 
         ]
 
-        # Draw ring position
         draw_ring_position(frame, ring_coordinates)
 
     return frame
 
 def main():
-    # Initialize webcam
-    cap = cv2.VideoCapture(0)  # 0 for the default webcam
+    cap = cv2.VideoCapture(0)  
 
     if not cap.isOpened():
         print("Error: Unable to access the webcam.")
@@ -62,17 +58,13 @@ def main():
             print("Error: Failed to capture frame.")
             break
 
-        # Process the frame to detect landmarks and draw the ring
         frame = process_frame(frame)
 
-        # Display the processed frame
         cv2.imshow("Hand Tracking", frame)
 
-        # Exit the loop when the 'q' key is pressed
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    # Release the webcam and close the window
     cap.release()
     cv2.destroyAllWindows()
 
